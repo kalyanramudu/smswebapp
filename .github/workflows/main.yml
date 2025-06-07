@@ -1,0 +1,22 @@
+name: Run on Self-Hosted Runner
+
+on:
+  push:
+    branches:
+      - main   # or any branch you want
+
+jobs:
+  build:
+    runs-on: self-hosted   # tells GitHub to run on your self-hosted runner
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Show runner name
+        run: echo "Running on runner: $RUNNER_NAME"
+
+      - name: Run sample command
+        run: |
+          echo "Hello from my self-hosted runner!"
+          uname -a
