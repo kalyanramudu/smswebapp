@@ -1,9 +1,44 @@
-name: Test Workflow
+name: Deploy SAM app on Self-Hosted Runner
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: us-east-1
+  S3_BUCKET: jenkinsdir
+  STACK_NAME: kalyansam
 
 jobs:
-  test:
+  deploy:
     runs-on: self-hosted
+
     steps:
-      - run: echo "Test run"
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Homebrew (if needed)
+        run: |
+          echo '' >> /var/lib/jenkins/.bashrc
+          echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /var/lib/jenkins/.bashrc
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+      - name: Build SAM application
+        run: sam build
+
+      - name: Package SAM application
+        run: sam package --output-template-file packaged.yaml --s3-bucket ${{ env.S3_BUCKET }} --region ${{ env.AWS_REGION }}
+
+      - name: Deploy SAM application
+        run: sam deploy --template-file packaged.yaml --stack-name ${{ env.STACK_NAME }} --capabilities CAPABILITY_IAM --region ${{ env.AWS_REGION }} --no-confirm-changeset
+
+      - name: Print completion message
+        run: echo "SAM deployment completed successfully!"
