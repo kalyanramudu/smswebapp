@@ -3,11 +3,11 @@ name: Run on Self-Hosted Runner
 on:
   push:
     branches:
-      - main   # or any branch you want
+      - main
 
 jobs:
   build:
-    runs-on: self-hosted   # tells GitHub to run on your self-hosted runner
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repo
