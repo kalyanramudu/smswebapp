@@ -41,4 +41,4 @@ jobs:
         run: sam deploy --template-file packaged.yaml --stack-name ${{ env.STACK_NAME }} --capabilities CAPABILITY_IAM --region ${{ env.AWS_REGION }} --no-confirm-changeset
 
       - name: Print completion message
-        run: echo "SAM deployment completed successfully!"
+        run: echo "SAM deployment completed successfully !"
