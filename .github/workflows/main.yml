@@ -27,8 +27,6 @@ jobs:
 
       - name: Setup Homebrew (if needed)
         run: |
-          echo '' >> /var/lib/jenkins/.bashrc
-          echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /var/lib/jenkins/.bashrc
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
       - name: Build SAM application
