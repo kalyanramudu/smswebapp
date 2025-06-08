@@ -27,6 +27,8 @@ jobs:
 
       - name: Setup Homebrew (if needed)
         run: |
+          echo '' >> /home/tempuser/.bashrc
+          echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/tempuser/.bashrc
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
       - name: Build SAM application
